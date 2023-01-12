@@ -1,0 +1,2 @@
+E:\Repos\SteamNew\SteamNew\SteamNew\obj\Debug\SteamNew.esproj.SuggestedBindingRedirects.cache
+E:\Repos\SteamNew\SteamNew\SteamNew\obj\Debug\SteamNew.esproj.CoreCompileInputs.cache

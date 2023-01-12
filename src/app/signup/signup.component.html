@@ -1,0 +1,24 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="card">
+        <div class="text-center">
+          <h1>Sign Up</h1>
+          <h6>Create an account</h6>
+        </div>
+        <form [formGroup]="signupForm" (ngSubmit)="submitForm()">
+          <div class="mb-3">
+            <label for="inputUsername" class="form-label">Username</label>
+            <input formControlName="username" type="text" class="form-control" id="inputUsername">
+          </div>
+          <div class="mb-3">
+            <label for="inputPassword" class="form-label">Password</label>
+            <input formControlName="passwd" type="password" class="form-control" id="inputPassword">
+          </div>
+          <button type="submit" class="btn btn-primary">Sign Up</button>
+          <a routerLink="/login">Cancel</a>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
