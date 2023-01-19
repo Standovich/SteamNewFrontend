@@ -1,0 +1,7 @@
+.module{
+    margin: 2%;
+    outline-style: solid;
+    outline-width: 1px;
+    border-radius: 10px;
+    padding: 5px;
+}
