@@ -37,12 +37,12 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>Name</td>
-                <td>Dev</td>
-                <td>1. 1. 0001</td>
-                <td>60</td>
-                <td>Bla bla bla</td>
+            <tr *ngFor="let game of games">
+                <td>{{ game.game_Name }}</td>
+                <td>{{ game.devTeam_Id }}</td>
+                <td>{{ game.game_RelDate }}</td>
+                <td>{{ game.game_Price }}</td>
+                <td>{{ game.game_Description }}</td>
                 <td>
                     <button class="btn btn-info">Edit</button>
                     <button class="btn btn-danger mx-3">Delete</button>
@@ -59,15 +59,17 @@
             <tr>
                 <th scope="col">Name</th>
                 <th scope="col">Password</th>
+                <th scope="col">Tier</th>
                 <th scope="col">Dev team Id</th>
                 <th></th>
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>Name</td>
-                <td>Password</td>
-                <td>Dev team Id</td>
+            <tr *ngFor="let user of users">
+                <td>{{ user.user_Name }}</td>
+                <td>{{ user.user_Passwd }}</td>
+                <td>{{ user.tier }}</td>
+                <td>{{ user.devTeam_Id }}</td>
                 <td>
                     <button class="btn btn-info">Edit</button>
                     <button class="btn btn-danger mx-3">Delete</button>
@@ -87,11 +89,11 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>Name</td>
+            <tr *ngFor="let developer of developers">
+                <td>{{ developer.devTeam_name }}</td>
                 <td>
-                    <button class="btn btn-info">Edit</button>
-                    <button class="btn btn-danger mx-3">Delete</button>
+                    <button class="btn btn-info" data-bs-toggle="modal" data-bs-target="#developerModal">Edit</button>
+                    <button (click)="deleteDeveloper(developer.id)" class="btn btn-danger mx-3">Delete</button>
                 </td>
             </tr>
         </tbody>
@@ -137,7 +139,7 @@
         </div>
     </div>
 </div>
-<!-- Game Modal -->
+<!-- User Modal -->
 <div class="modal fade" id="userModal" tabindex="-1" aria-labelledby="userModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -168,7 +170,7 @@
         </div>
     </div>
 </div>
-<!-- Game Modal -->
+<!-- Developer Modal -->
 <div class="modal fade" id="developerModal" tabindex="-1" aria-labelledby="developerModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -177,16 +179,16 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form>
+                <form [formGroup]="developerForm" (ngSubmit)="submitDevAddForm()">
                     <div class="mb-3">
                         <label for="developerName" class="form-label">Name</label>
-                        <input type="text" class="form-control" id="developerName">
+                        <input type="text" formControlName="name" class="form-control" id="developerName">
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary">Add</button>
+                <button type="button" id="devCancel" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" (click)="submitDevAddForm()" class="btn btn-primary">Add</button>
             </div>
         </div>
     </div>

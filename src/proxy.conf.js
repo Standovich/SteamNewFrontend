@@ -4,7 +4,8 @@ const PROXY_CONFIG = [
       "/weatherforecast",
       "/api/user",
       "/api/game",
-      "/api/post"
+      "/api/post",
+      "/api/developer"
     ],
     target: "https://localhost:7172",
     secure: false
