@@ -92,13 +92,13 @@
             <tr *ngFor="let developer of developers">
                 <td>{{ developer.devTeam_name }}</td>
                 <td>
-                    <button class="btn btn-info" data-bs-toggle="modal" data-bs-target="#developerModal">Edit</button>
+                    <button (click)="onEdit(developer)" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#developerModal">Edit</button>
                     <button (click)="deleteDeveloper(developer.id)" class="btn btn-danger mx-3">Delete</button>
                 </td>
             </tr>
         </tbody>
     </table>
-    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#developerModal">Add developer</button>
+    <button type="button" (click)="onAdd()" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#developerModal">Add developer</button>
 </div>
 <!-- Game Modal -->
 <div class="modal fade" id="gameModal" tabindex="-1" aria-labelledby="gameModalLabel" aria-hidden="true">
@@ -179,7 +179,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form [formGroup]="developerForm" (ngSubmit)="submitDevAddForm()">
+                <form [formGroup]="developerForm">
                     <div class="mb-3">
                         <label for="developerName" class="form-label">Name</label>
                         <input type="text" formControlName="name" class="form-control" id="developerName">
@@ -188,7 +188,8 @@
             </div>
             <div class="modal-footer">
                 <button type="button" id="devCancel" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" (click)="submitDevAddForm()" class="btn btn-primary">Add</button>
+                <button type="button" *ngIf="showAdd" (click)="addDeveloper()" class="btn btn-primary">Add</button>
+                <button type="button" *ngIf="showEdit" (click)="updateDeveloper()" class="btn btn-primary">Edit</button>
             </div>
         </div>
     </div>

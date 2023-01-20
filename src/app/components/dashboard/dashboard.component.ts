@@ -16,6 +16,8 @@ export class DashboardComponent implements OnInit{
   users: User[] = [];
   developers: Developer[] = [];
   public developerForm !: FormGroup;
+  showAdd !: boolean;
+  showEdit !: boolean;
   constructor(
     private formBuilder: FormBuilder,
     private developerService: DevelopersService
@@ -23,6 +25,7 @@ export class DashboardComponent implements OnInit{
 
   ngOnInit(): void {
     this.developerForm = this.formBuilder.group({
+      id: 0,
       name: ['']
     })
 
@@ -42,7 +45,7 @@ export class DashboardComponent implements OnInit{
     });
   }
 
-  submitDevAddForm(){
+  addDeveloper(){
     var formData: any = new FormData();
     formData.append('Name', this.developerForm.get('name')?.value);
 
@@ -68,7 +71,32 @@ export class DashboardComponent implements OnInit{
     });
   }
 
+  updateDeveloper(){
+    var formData: any = new FormData();
+    formData.append('Id', this.developerForm.get('id')?.value);
+    formData.append('DevTeam_name', this.developerForm.get('name')?.value);
+
+    this.developerService.updateDeveloper(formData)
+    .subscribe({
+      next: (developer) => {
+        console.log(developer);
+        let ref = document.getElementById('devCancel');
+        ref?.click();
+        this.refreshDevData();
+      }
+    })
+  }
+
+  onAdd(){
+    this.developerForm.reset();
+    this.showAdd = true;
+    this.showEdit = false;
+  }
+
   onEdit(dev: Developer){
+    this.showAdd = false;
+    this.showEdit = true;
+    this.developerForm.controls['id'].setValue(dev.id);
     this.developerForm.controls['name'].setValue(dev.devTeam_name);
   }
 }
