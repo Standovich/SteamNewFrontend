@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
+import { UsersService } from 'src/app/services/users.service';
 
 @Component({
   selector: 'app-signup',
@@ -12,6 +13,7 @@ export class SignupComponent implements OnInit{
   public signupForm !: FormGroup;
   constructor(
     private formBuilder: FormBuilder,
+    private userService: UsersService,
     private http: HttpClient,
     private router: Router
   ) { }
@@ -28,13 +30,16 @@ export class SignupComponent implements OnInit{
     formData.append('Username', this.signupForm.get('username')?.value);
     formData.append('Passwd', this.signupForm.get('passwd')?.value);
 
-    this.http.post('api/user/createUser', formData)
-      .subscribe(res => {
-        alert("You have successfully signed up!")
+    this.userService.addUser(formData)
+    .subscribe({
+      next: (user) => {
+        alert("You have successfully signed up!");
         this.signupForm.reset();
-        this.router.navigate(['login'])
-      }, error => {
-        alert("Something went wrong!")
-      });
+        this.router.navigate(['login']);
+      },
+      error: (response) => {
+        console.log(response);
+      }
+    })
   }
 }
