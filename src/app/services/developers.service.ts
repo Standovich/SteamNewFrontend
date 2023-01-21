@@ -18,11 +18,15 @@ export class DevelopersService {
     return this.http.get<Developer[]>('https://localhost:7172/api/developer/getDevelopers');
   }
 
+  getDeveloper(id: number): Observable<Developer> {
+    return this.http.get<Developer>('https://localhost:7172/api/developer/getDeveloper/' + id);
+  }
+
   deleteDeveloper(id: number){
-    return this.http.delete<Developer>('https://localhost:7172/api/developer/deleteDeveloper/'+id);
+    return this.http.delete<Developer>('https://localhost:7172/api/developer/deleteDeveloper/' + id);
   }
 
   updateDeveloper(editDevFormData: any): Observable<Developer>{
-    return this.http.put<Developer>('https://localhost:7172/api/developer/addDeveloper', editDevFormData);
+    return this.http.put<Developer>('https://localhost:7172/api/developer/updateDeveloper', editDevFormData);
   }
 }
