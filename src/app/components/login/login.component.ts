@@ -20,6 +20,9 @@ export class LoginComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    if(this.authService.isLogged())
+    this.router.navigate(['storefront']);
+
     this.loginForm = this.formBuilder.group({
       username: [''],
       password: ['']
@@ -37,18 +40,12 @@ export class LoginComponent implements OnInit {
         this.loginForm.reset();
         console.log(response.token)
         this.authService.storeToken(response.token)
-        this.updateLocalStorage();
-        this.router.navigate(['storefront'])
+        this.authService.updateLocalStorage();
+        this.router.navigate(['storefront']);
       },
-      error: (error) => {
-        console.log(error);
+      error: (err) => {
+        console.log(err);
       }
     })
-  }
-
-  updateLocalStorage(){
-    let tokenPayload = this.authService.decodedToken();
-    this.userService.setUsernameToLocalStorage(tokenPayload.name);
-    this.userService.setRoleToLocalStorage(tokenPayload.role);
   }
 }

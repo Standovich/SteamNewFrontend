@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Route, Router } from '@angular/router';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { UsersService } from 'src/app/services/users.service';
 
@@ -11,7 +12,11 @@ export class NavbarComponent implements OnInit{
   public username: string = "";
   public role!: string;
 
-  constructor(private authService: AuthenticationService, private userService: UsersService){}
+  constructor(
+    private authService: AuthenticationService, 
+    private userService: UsersService,
+    private router: Router
+  ){}
 
   ngOnInit() {
     this.userService.getUsernameFromLocalStorage()
@@ -33,5 +38,10 @@ export class NavbarComponent implements OnInit{
 
   isLogged(): boolean{
     return this.authService.isLogged();
+  }
+
+  initialNavigation(){
+    if(this.role !== 'Customer')
+    this.router.navigate(['dashboard']);
   }
 }

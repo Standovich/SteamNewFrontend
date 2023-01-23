@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { User } from '../models/user.model';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { UsersService } from './users.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,12 +12,20 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 export class AuthenticationService {
   private userPayload: any;
 
-  constructor(private http: HttpClient, private router: Router) {
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private userService: UsersService
+  ) {
     this.userPayload = this.decodedToken();
   }
 
   logIn(loginFormData: any): Observable<User> {
     return this.http.post<User>('https://localhost:7172/api/user/login', loginFormData);
+  }
+
+  verify(verifyFormData: any): Observable<User> {
+    return this.http.post<User>('https://localhost:7172/api/user/verify', verifyFormData);
   }
 
   logOut(){
@@ -34,6 +43,12 @@ export class AuthenticationService {
 
   isLogged(): boolean {
     return !!localStorage.getItem('token')
+  }
+
+  updateLocalStorage(){
+    let tokenPayload = this.decodedToken();
+    this.userService.setUsernameToLocalStorage(tokenPayload.name);
+    this.userService.setRoleToLocalStorage(tokenPayload.role);
   }
 
   decodedToken(){

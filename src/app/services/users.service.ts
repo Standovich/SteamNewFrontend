@@ -45,8 +45,12 @@ export class UsersService {
     return this.http.get<User[]>('https://localhost:7172/api/user/getUsers');
   }
 
-  getUser(id: number): Observable<User> {
-    return this.http.get<User>('https://localhost:7172/api/user/getUser/' + id);
+  getUserById(id: number): Observable<User> {
+    return this.http.get<User>('https://localhost:7172/api/user/getUserById/' + id);
+  }
+
+  getUserByName(username: string): Observable<User> {
+    return this.http.get<User>('https://localhost:7172/api/user/getUserByName/' + username);
   }
 
   deleteUser(id: number){

@@ -6,18 +6,28 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link" routerLink="/storefront" aria-current="page">Store</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" routerLink="/library">Library</a>
-          </li>
+          <ng-container
+          *ngIf="role === 'Customer'; then Customer; else Managment">
+          </ng-container>
+          <ng-template #Customer>
+            <li class="nav-item">
+              <a class="nav-link" routerLink="/storefront" aria-current="page">Store</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" routerLink="/library">Library</a>
+            </li>
+          </ng-template>
+          <ng-template #Managment>
+            <li class="nav-item">
+              <a class="nav-link" routerLink="/dashboard">Dashboard</a>
+            </li>
+          </ng-template>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 {{username}}
             </a>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" >Account</a></li>
+              <li><a class="dropdown-item" routerLink="/profile">Account</a></li>
               <li><hr class="dropdown-divider"></li>
               <li><a (click)="logOut()" href="#" class="dropdown-item" >Log Out</a></li>
             </ul>

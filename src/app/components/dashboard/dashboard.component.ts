@@ -290,6 +290,7 @@ export class DashboardComponent implements OnInit{
     this.userForm.controls['password'].setValue(user.user_Password);
     this.userForm.controls['role'].setValue(user.role);
     this.userForm.controls['devTeam'].setValue(user.devTeam_Id);
+    this.roleChange();
   }
 
   onEditDeveloper(dev: Developer){
@@ -297,5 +298,11 @@ export class DashboardComponent implements OnInit{
     this.showEdit = true;
     this.developerForm.controls['id'].setValue(dev.id);
     this.developerForm.controls['name'].setValue(dev.devTeam_name);
+  }
+
+  roleChange(){
+    if(this.userForm.get('role')?.value !== 'Developer')
+    this.userForm.controls['devTeam'].disable();
+    else this.userForm.controls['devTeam'].enable();
   }
 }

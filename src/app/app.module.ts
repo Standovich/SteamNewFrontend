@@ -13,6 +13,7 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { AuthGuard } from './guards/auth.guard';
 import { TokenInterceptor } from './interceptors/token.interceptor';
 import { NavbarComponent } from './components/navbar/navbar.component';
+import { ProfileComponent } from './components/profile/profile.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -20,7 +21,8 @@ const routes: Routes = [
   { path: 'signup', component: SignupComponent },
   { path: 'storefront', component: StorefrontComponent, canActivate:[AuthGuard] },
   { path: 'library', component: LibraryComponent, canActivate:[AuthGuard] },
-  { path: 'dashboard', component: DashboardComponent, canActivate:[AuthGuard] }
+  { path: 'dashboard', component: DashboardComponent, canActivate:[AuthGuard] },
+  { path: 'profile', component: ProfileComponent, canActivate:[AuthGuard] }
 ];
 
 @NgModule({
@@ -31,7 +33,8 @@ const routes: Routes = [
     StorefrontComponent,
     LibraryComponent,
     DashboardComponent,
-    NavbarComponent
+    NavbarComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,
