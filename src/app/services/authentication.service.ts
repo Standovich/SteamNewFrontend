@@ -51,4 +51,9 @@ export class AuthenticationService {
     if(this.userPayload)
     return this.userPayload.role;
   }
+
+  getDevTeam(){
+    if(this.userPayload)
+    return this.userPayload.userdata;
+  }
 }

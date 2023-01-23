@@ -8,6 +8,7 @@ import { DevelopersService } from 'src/app/services/developers.service';
 import { UsersService } from 'src/app/services/users.service';
 import { GamesService } from 'src/app/services/games.service';
 import { formatDate } from '@angular/common';
+import { AuthenticationService } from 'src/app/services/authentication.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -23,13 +24,16 @@ export class DashboardComponent implements OnInit{
   public userForm !: FormGroup;
   public developerForm !: FormGroup;
 
+  public role!: string;
+
   showAdd !: boolean;
   showEdit !: boolean;
   constructor(
     private formBuilder: FormBuilder,
     private developerService: DevelopersService,
     private userService: UsersService,
-    private gameService: GamesService
+    private gameService: GamesService,
+    private authService: AuthenticationService
   ) { }
 
   ngOnInit(): void {
@@ -37,6 +41,12 @@ export class DashboardComponent implements OnInit{
     this.refreshGameData();
     this.refreshUserData();
     this.refreshDevData();
+
+    this.userService.getRoleFromLocalStorage()
+    .subscribe(value => {
+      let roleFromToken = this.authService.getRole();
+      this.role = value || roleFromToken;
+    })
   }
 
   initForms(){

@@ -8,19 +8,8 @@ import { UsersService } from 'src/app/services/users.service';
   styleUrls: ['./storefront.component.css']
 })
 export class StorefrontComponent implements OnInit {
-  public username: string = "";
 
-  constructor(private authService: AuthenticationService, private userService: UsersService){}
+  constructor(){}
 
-  ngOnInit() {
-    this.userService.getUsernameFromStore()
-    .subscribe(value => {
-      let usernameFromToken = this.authService.getUsername();
-      this.username = value || usernameFromToken;
-    })
-  }
-
-  logOut() {
-    this.authService.logOut()
-  }
+  ngOnInit() {}
 }

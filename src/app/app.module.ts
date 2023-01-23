@@ -12,6 +12,7 @@ import { LibraryComponent } from './components/library/library.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { AuthGuard } from './guards/auth.guard';
 import { TokenInterceptor } from './interceptors/token.interceptor';
+import { NavbarComponent } from './components/navbar/navbar.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -29,7 +30,8 @@ const routes: Routes = [
     SignupComponent,
     StorefrontComponent,
     LibraryComponent,
-    DashboardComponent
+    DashboardComponent,
+    NavbarComponent
   ],
   imports: [
     BrowserModule,

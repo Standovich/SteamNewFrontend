@@ -9,23 +9,32 @@ import { User } from '../models/user.model';
 export class UsersService {
   private username$ = new BehaviorSubject<string>("");
   private role$ = new BehaviorSubject<string>("");
+  private devTeam$ = new BehaviorSubject<string>("");
 
   constructor(private http: HttpClient) { }
 
-  public getRoleFromStore(){
+  public getRoleFromLocalStorage(){
     return this.role$.asObservable();
   }
 
-  public setRoleForStore(role: string){
+  public setRoleToLocalStorage(role: string){
     this.role$.next(role);
   }
 
-  public getUsernameFromStore(){
+  public getUsernameFromLocalStorage(){
     return this.username$.asObservable();
   }
 
-  public setUsernameForStore(username: string){
+  public setUsernameToLocalStorage(username: string){
     this.username$.next(username);
+  }
+
+  public getDevTeamFromLocalStorage(){
+    return this.devTeam$.asObservable();
+  }
+
+  public setDevTeamToLocalStorage(devTeam: string){
+    this.devTeam$.next(devTeam);
   }
 
   addUser(addUserFormData: any): Observable<User> {

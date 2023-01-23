@@ -37,16 +37,18 @@ export class LoginComponent implements OnInit {
         this.loginForm.reset();
         console.log(response.token)
         this.authService.storeToken(response.token)
-
-        let tokenPayload = this.authService.decodedToken();
-        this.userService.setUsernameForStore(tokenPayload.name);
-        this.userService.setRoleForStore(tokenPayload.role);
-        
+        this.updateLocalStorage();
         this.router.navigate(['storefront'])
       },
       error: (error) => {
         console.log(error);
       }
     })
+  }
+
+  updateLocalStorage(){
+    let tokenPayload = this.authService.decodedToken();
+    this.userService.setUsernameToLocalStorage(tokenPayload.name);
+    this.userService.setRoleToLocalStorage(tokenPayload.role);
   }
 }
