@@ -1,7 +1,8 @@
 export interface User {
     id: number;
     user_Name: string;
-    user_Passwd: string;
-    tier: number;
+    user_Password: string;
+    role: string;
+    token: string;
     devTeam_Id: number;
 }

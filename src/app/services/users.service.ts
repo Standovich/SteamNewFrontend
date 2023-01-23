@@ -1,14 +1,32 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { User } from '../models/user.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UsersService {
+  private username$ = new BehaviorSubject<string>("");
+  private role$ = new BehaviorSubject<string>("");
 
   constructor(private http: HttpClient) { }
+
+  public getRoleFromStore(){
+    return this.role$.asObservable();
+  }
+
+  public setRoleForStore(role: string){
+    this.role$.next(role);
+  }
+
+  public getUsernameFromStore(){
+    return this.username$.asObservable();
+  }
+
+  public setUsernameForStore(username: string){
+    this.username$.next(username);
+  }
 
   addUser(addUserFormData: any): Observable<User> {
     return this.http.post<User>('https://localhost:7172/api/user/addUser', addUserFormData);

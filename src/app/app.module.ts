@@ -1,4 +1,4 @@
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule, Routes } from '@angular/router';
@@ -10,14 +10,16 @@ import { SignupComponent } from './components/signup/signup.component';
 import { StorefrontComponent } from './components/storefront/storefront.component';
 import { LibraryComponent } from './components/library/library.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { AuthGuard } from './guards/auth.guard';
+import { TokenInterceptor } from './interceptors/token.interceptor';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
   { path: 'signup', component: SignupComponent },
-  { path: 'storefront', component: StorefrontComponent },
-  { path: 'library', component: LibraryComponent},
-  { path: 'dashboard', component: DashboardComponent}
+  { path: 'storefront', component: StorefrontComponent, canActivate:[AuthGuard] },
+  { path: 'library', component: LibraryComponent, canActivate:[AuthGuard] },
+  { path: 'dashboard', component: DashboardComponent, canActivate:[AuthGuard] }
 ];
 
 @NgModule({
@@ -36,7 +38,11 @@ const routes: Routes = [
     FormsModule,
     ReactiveFormsModule
   ],
-  providers: [],
+  providers: [{
+    provide: HTTP_INTERCEPTORS,
+    useClass: TokenInterceptor,
+    multi: true
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

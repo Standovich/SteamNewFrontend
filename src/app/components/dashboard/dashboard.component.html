@@ -67,8 +67,8 @@
         <tbody>
             <tr *ngFor="let user of users">
                 <td>{{ user.user_Name }}</td>
-                <td>{{ user.user_Passwd }}</td>
-                <td>{{ user.tier }}</td>
+                <td>{{ user.user_Password }}</td>
+                <td>{{ user.role }}</td>
                 <td>{{ user.devTeam_Id }}</td>
                 <td>
                     <button (click)="onEditUser(user)" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#userModal">Edit</button>
@@ -160,15 +160,15 @@
                     </div>
                     <div class="mb-3">
                         <label for="userPassword" class="form-label">Password</label>
-                        <input type="text" formControlName="passwd" class="form-control" id="userPassword">
+                        <input type="text" formControlName="password" class="form-control" id="userPassword">
                     </div>
                     <div class="mb-3">
-                        <label for="userTier" class="form-label">Tier:</label>
-                        <select formControlName="tier" class="form-control" id="userTier">
-                            <option value="" disabled selected>Select user's tier</option>
-                            <option value="0">Admin</option>
-                            <option value="1">Developer</option>
-                            <option value="2">Customer</option>
+                        <label for="userRole" class="form-label">Role:</label>
+                        <select formControlName="role" class="form-control" id="userRole">
+                            <option value="" disabled selected>Select user's role</option>
+                            <option value="Admin">Admin</option>
+                            <option value="Developer">Developer</option>
+                            <option value="Customer">Customer</option>
                         </select>
                     </div>
                     <div class="mb-3">

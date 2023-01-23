@@ -2,6 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AuthenticationService } from 'src/app/services/authentication.service';
+import { UsersService } from 'src/app/services/users.service';
 
 @Component({
   selector: 'app-login',
@@ -12,29 +14,39 @@ export class LoginComponent implements OnInit {
   public loginForm !: FormGroup;
   constructor(
     private formBuilder: FormBuilder,
-    private http: HttpClient,
-    private router: Router
+    private router: Router,
+    private authService: AuthenticationService,
+    private userService: UsersService
   ) { }
 
   ngOnInit(): void {
     this.loginForm = this.formBuilder.group({
       username: [''],
-      passwd: ['']
+      password: ['']
     })
   }
 
   login() {
     var formData: any = new FormData();
     formData.append('Username', this.loginForm.get('username')?.value);
-    formData.append('Passwd', this.loginForm.get('passwd')?.value);
+    formData.append('Password', this.loginForm.get('password')?.value);
 
-    this.http.get('api/user/login', formData)
-      .subscribe(res => {
-        alert(res)
+    this.authService.logIn(formData)
+    .subscribe({
+      next: (response) => {
         this.loginForm.reset();
+        console.log(response.token)
+        this.authService.storeToken(response.token)
+
+        let tokenPayload = this.authService.decodedToken();
+        this.userService.setUsernameForStore(tokenPayload.name);
+        this.userService.setRoleForStore(tokenPayload.role);
+        
         this.router.navigate(['storefront'])
-      }, error => {
-        alert(error.message)
-      });
+      },
+      error: (error) => {
+        console.log(error);
+      }
+    })
   }
 }

@@ -51,8 +51,8 @@ export class DashboardComponent implements OnInit{
     this.userForm = this.formBuilder.group({
       id: 0,
       username: [''],
-      passwd: [''],
-      tier: 0,
+      password: [''],
+      role: [''],
       devTeam: -1
     })
     this.developerForm = this.formBuilder.group({
@@ -123,8 +123,8 @@ export class DashboardComponent implements OnInit{
   addUser(){
     var formData: any = new FormData();
     formData.append('Username', this.userForm.get('username')?.value);
-    formData.append('Passwd', this.userForm.get('passwd')?.value);
-    formData.append('Tier', this.userForm.get('tier')?.value);
+    formData.append('Password', this.userForm.get('password')?.value);
+    formData.append('Role', this.userForm.get('role')?.value);
     formData.append('DevTeam', this.userForm.get('devTeam')?.value);
 
     this.userService.addUser(formData)
@@ -135,6 +135,9 @@ export class DashboardComponent implements OnInit{
         let ref = document.getElementById('userCancel');
         ref?.click();
         this.refreshUserData();
+      },
+      error: (error) => {
+        console.log(error.error.message)
       }
     })
   }
@@ -209,8 +212,8 @@ export class DashboardComponent implements OnInit{
     var formData: any = new FormData();
     formData.append('Id', this.userForm.get('id')?.value)
     formData.append('User_Name', this.userForm.get('username')?.value)
-    formData.append('User_Passwd', this.userForm.get('passwd')?.value)
-    formData.append('Tier', this.userForm.get('tier')?.value)
+    formData.append('User_Password', this.userForm.get('password')?.value)
+    formData.append('Role', this.userForm.get('role')?.value)
     formData.append('DevTeam_Id', this.userForm.get('devTeam')?.value);
 
     this.userService.updateUser(formData)
@@ -274,8 +277,8 @@ export class DashboardComponent implements OnInit{
     this.showEdit = true;
     this.userForm.controls['id'].setValue(user.id);
     this.userForm.controls['username'].setValue(user.user_Name);
-    this.userForm.controls['passwd'].setValue(user.user_Passwd);
-    this.userForm.controls['tier'].setValue(user.tier);
+    this.userForm.controls['password'].setValue(user.user_Password);
+    this.userForm.controls['role'].setValue(user.role);
     this.userForm.controls['devTeam'].setValue(user.devTeam_Id);
   }
 
