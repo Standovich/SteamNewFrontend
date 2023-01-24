@@ -18,8 +18,16 @@ export class GamesService {
     return this.http.get<Game[]>('https://localhost:7172/api/game/getGames');
   }
 
+  getGamesByDev(id: number):Observable<Game[]> {
+    return this.http.get<Game[]>('https://localhost:7172/api/game/getGamesByDev/' + id);
+  }
+
   getGame(id: number): Observable<Game> {
     return this.http.get<Game>('https://localhost:7172/api/game/getGame/' + id);
+  }
+
+  getOwnedGames(id: number): Observable<Game[]>{
+    return this.http.get<Game[]>('https://localhost:7172/api/game/getOwned/' + id);
   }
 
   deleteGame(id: number){

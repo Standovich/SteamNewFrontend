@@ -12,6 +12,7 @@ import { UsersService } from 'src/app/services/users.service';
 })
 export class LoginComponent implements OnInit {
   public loginForm !: FormGroup;
+  private role !: string;
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
@@ -21,7 +22,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     if(this.authService.isLogged())
-    this.router.navigate(['storefront']);
+    this.initialNavigation();
 
     this.loginForm = this.formBuilder.group({
       username: [''],
@@ -41,11 +42,26 @@ export class LoginComponent implements OnInit {
         console.log(response.token)
         this.authService.storeToken(response.token)
         this.authService.updateLocalStorage();
-        this.router.navigate(['storefront']);
+        this.initialNavigation();
       },
       error: (err) => {
         console.log(err);
       }
     })
+  }
+
+  initialNavigation(){
+    this.userService.getRoleFromLocalStorage()
+    .subscribe(value => {
+      let roleFromToken = this.authService.getRole();
+      this.role = value || roleFromToken;
+    })
+
+    if(this.role === 'Customer') {
+      this.router.navigate(['storefront']);
+    }
+    else{
+      this.router.navigate(['dashboard']);
+    }
   }
 }

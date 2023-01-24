@@ -39,9 +39,4 @@ export class NavbarComponent implements OnInit{
   isLogged(): boolean{
     return this.authService.isLogged();
   }
-
-  initialNavigation(){
-    if(this.role !== 'Customer')
-    this.router.navigate(['dashboard']);
-  }
 }

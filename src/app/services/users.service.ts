@@ -33,8 +33,8 @@ export class UsersService {
     return this.devTeam$.asObservable();
   }
 
-  public setDevTeamToLocalStorage(devTeam: string){
-    this.devTeam$.next(devTeam);
+  public setDevTeamToLocalStorage(devteam: string){
+    this.devTeam$.next(devteam);
   }
 
   addUser(addUserFormData: any): Observable<User> {

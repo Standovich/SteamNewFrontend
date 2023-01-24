@@ -1,1 +1,27 @@
-<p>library works!</p>
+<h2>Owned games:</h2>
+<div class="row">
+    <div class="column">
+        <ng-container *ngFor="let game of games">
+            <div class="storeBox" (click)="changeGame(game)">
+                <h3>{{game.game_Name}}</h3>
+                <h4>Developer: {{getDeveloper(game.id)}}</h4>
+                <p>{{game.game_Description}}</p>
+                <p>Click to see more!</p>
+            </div>
+        </ng-container>
+    </div>
+    <div class="column">
+        <div *ngIf="display" class="displayGameBox">
+            <h2>{{gameDisplay.game_Name}}</h2>
+            <h3>Developer: {{getDeveloper(gameDisplay.id)}}</h3>
+            <h4>Description:</h4>
+            <p>{{gameDisplay.game_Description}}</p>
+        </div>
+        <ng-container *ngFor="let post of posts">
+            <div class="displayPostBox">
+                <h3>{{post.post_Title}}</h3>
+                <p>{{post.post_Content}}</p>
+            </div>
+        </ng-container>
+    </div>
+</div>

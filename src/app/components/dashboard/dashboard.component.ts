@@ -9,6 +9,8 @@ import { UsersService } from 'src/app/services/users.service';
 import { GamesService } from 'src/app/services/games.service';
 import { formatDate } from '@angular/common';
 import { AuthenticationService } from 'src/app/services/authentication.service';
+import { Post } from 'src/app/models/post.model';
+import { PostsService } from 'src/app/services/posts.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -16,15 +18,19 @@ import { AuthenticationService } from 'src/app/services/authentication.service';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit{
-  games: Game[] = [];
-  users: User[] = [];
-  developers: Developer[] = [];
+  public games: Game[] = [];
+  public users: User[] = [];
+  public developers: Developer[] = [];
+  public posts: Post[] = [];
 
   public gameForm !: FormGroup;
   public userForm !: FormGroup;
   public developerForm !: FormGroup;
+  public postForm !: FormGroup;
 
   public role!: string;
+  private devTeam!: number;
+  private selectedGame!: number;
 
   showAdd !: boolean;
   showEdit !: boolean;
@@ -33,19 +39,29 @@ export class DashboardComponent implements OnInit{
     private developerService: DevelopersService,
     private userService: UsersService,
     private gameService: GamesService,
+    private postService: PostsService,
     private authService: AuthenticationService
   ) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
+    this.initDevValues();
     this.initForms();
     this.refreshGameData();
     this.refreshUserData();
     this.refreshDevData();
+  }
 
+  initDevValues(){
     this.userService.getRoleFromLocalStorage()
     .subscribe(value => {
       let roleFromToken = this.authService.getRole();
       this.role = value || roleFromToken;
+    })
+
+    this.userService.getDevTeamFromLocalStorage()
+    .subscribe(value => {
+      let devFromToken = this.authService.getDevTeam();
+      this.devTeam = value || devFromToken;
     })
   }
 
@@ -57,6 +73,12 @@ export class DashboardComponent implements OnInit{
       description: [''],
       price: 0,
       devTeam: 0
+    })
+    this.postForm = this.formBuilder.group({
+      id: 0,
+      title: [''],
+      content: [''],
+      gameId: -1
     })
     this.userForm = this.formBuilder.group({
       id: 0,
@@ -72,14 +94,45 @@ export class DashboardComponent implements OnInit{
   }
 
   refreshGameData(){
-    this.gameService.getAllGames()
+    if(this.role === 'Developer'){
+      this.gameService.getGamesByDev(this.devTeam)
+      .subscribe({
+        next: (games) => {
+          console.log(games);
+          this.games = games;
+          this.selectedGame = games[0].devTeam_Id;
+          this.refreshPostData(this.selectedGame);
+        },
+        error: (err) => {
+          console.log(err);
+        }
+      })
+    }
+    else{
+      this.gameService.getAllGames()
+      .subscribe({
+        next: (games) => {
+          console.log(games);
+          this.games = games;
+          this.selectedGame = games[0].devTeam_Id;
+          this.refreshPostData(this.selectedGame);
+        },
+        error: (err) => {
+          console.log(err);
+        }
+      });
+    }
+  }
+
+  refreshPostData(id: number){
+    this.postService.getPostsByGame(id)
     .subscribe({
-      next: (games) => {
-        console.log(games);
-        this.games = games
+      next: (posts) => {
+        console.log(posts);
+        this.posts = posts;
       },
-      error: (response) => {
-        console.log(response)
+      error: (err) => {
+        console.log(err)
       }
     })
   }
@@ -91,8 +144,8 @@ export class DashboardComponent implements OnInit{
         console.log(users);
         this.users = users;
       },
-      error: (response) => {
-        console.log(response)
+      error: (err) => {
+        console.log(err)
       }
     })
   }
@@ -104,8 +157,8 @@ export class DashboardComponent implements OnInit{
         console.log(developers);
         this.developers = developers;
       },
-      error: (response) => {
-        console.log(response)
+      error: (err) => {
+        console.log(err)
       }
     });
   }
@@ -126,6 +179,34 @@ export class DashboardComponent implements OnInit{
         let ref = document.getElementById('gameCancel');
         ref?.click();
         this.refreshGameData();
+      },
+      error: (err) => {
+        console.log(err)
+      }
+    })
+  }
+
+  addPost(){
+    var formData: any = new FormData();
+    formData.append('Title', this.postForm.get('title')?.value);
+    formData.append('Content', this.postForm.get('content')?.value);
+    formData.append('GameId', this.selectedGame);
+
+    console.log(this.postForm.get('title')?.value);
+    console.log(this.postForm.get('content')?.value);
+    console.log(this.selectedGame);
+
+    this.postService.addPost(formData)
+    .subscribe({
+      next: (post) => {
+        console.log(post);
+        this.postForm.reset();
+        let ref = document.getElementById('postCancel');
+        ref?.click();
+        this.refreshPostData(this.selectedGame);
+      },
+      error: (err) => {
+        console.log(err);
       }
     })
   }
@@ -146,8 +227,9 @@ export class DashboardComponent implements OnInit{
         ref?.click();
         this.refreshUserData();
       },
-      error: (error) => {
-        console.log(error.error.message)
+      error: (err) => {
+        alert(err?.error.message);
+        console.log(err?.error.message);
       }
     })
   }
@@ -164,6 +246,9 @@ export class DashboardComponent implements OnInit{
         let ref = document.getElementById('devCancel');
         ref?.click();
         this.refreshDevData();
+      },
+      error: (err) => {
+        console.log(err)
       }
     })
   }
@@ -174,6 +259,22 @@ export class DashboardComponent implements OnInit{
       next: (game) => {
         console.log(game);
         this.refreshGameData();
+      },
+      error: (err) => {
+        console.log(err)
+      }
+    })
+  }
+
+  deletePost(id: number){
+    this.postService.deletePost(id)
+    .subscribe({
+      next: (post) => {
+        console.log(post);
+        this.refreshPostData(this.selectedGame);
+      },
+      error: (err) => {
+        console.log(err)
       }
     })
   }
@@ -184,6 +285,9 @@ export class DashboardComponent implements OnInit{
       next: (user) => {
         console.log(user);
         this.refreshUserData();
+      },
+      error: (err) => {
+        console.log(err)
       }
     })
   }
@@ -194,6 +298,9 @@ export class DashboardComponent implements OnInit{
       next: (developer) => {
         console.log(developer);
         this.refreshDevData();
+      },
+      error: (err) => {
+        console.log(err)
       }
     });
   }
@@ -214,6 +321,24 @@ export class DashboardComponent implements OnInit{
         let ref = document.getElementById('gameCancel');
         ref?.click();
         this.refreshGameData();
+      }
+    })
+  }
+
+  updatePost(){
+    var formData: any = new FormData();
+    formData.append('Id', this.postForm.get('id')?.value);
+    formData.append('Post_Title', this.postForm.get('title')?.value);
+    formData.append('Post_Content', this.postForm.get('content')?.value);
+    formData.append('Game_Id', this.selectedGame);
+
+    this.postService.updatePost(formData)
+    .subscribe({
+      next: (post) => {
+        console.log(post);
+        let ref = document.getElementById('postCancel');
+        ref?.click();
+        this.refreshPostData(this.selectedGame);
       }
     })
   }
@@ -259,6 +384,12 @@ export class DashboardComponent implements OnInit{
     this.showEdit = false;
   }
 
+  onAddPost(){
+    this.postForm.reset();
+    this.showAdd = true;
+    this.showEdit = false;
+  }
+
   onAddUser(){
     this.userForm.reset();
     this.showAdd = true;
@@ -282,6 +413,15 @@ export class DashboardComponent implements OnInit{
     this.gameForm.controls['devTeam'].setValue(game.devTeam_Id);
   }
 
+  onEditPost(post: Post){
+    this.showAdd = false;
+    this.showEdit = true;
+    this.postForm.controls['id'].setValue(post.id);
+    this.postForm.controls['title'].setValue(post.post_Title);
+    this.postForm.controls['content'].setValue(post.post_Content);
+    this.postForm.controls['gameId'].setValue(post.game_Id);
+  }
+
   onEditUser(user: User){
     this.showAdd = false;
     this.showEdit = true;
@@ -301,8 +441,15 @@ export class DashboardComponent implements OnInit{
   }
 
   roleChange(){
-    if(this.userForm.get('role')?.value !== 'Developer')
-    this.userForm.controls['devTeam'].disable();
+    if(this.userForm.get('role')?.value !== 'Developer'){
+      this.userForm.controls['devTeam'].setValue(-1);
+      this.userForm.controls['devTeam'].disable();
+    }
     else this.userForm.controls['devTeam'].enable();
+  }
+
+  gameSelectorChange(id: any){
+    this.selectedGame = id;
+    this.refreshPostData(this.selectedGame);
   }
 }
