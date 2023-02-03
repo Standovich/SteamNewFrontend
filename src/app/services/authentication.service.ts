@@ -11,7 +11,6 @@ import { UsersService } from './users.service';
 })
 export class AuthenticationService {
   private userPayload: any;
-  private userId!: number
 
   constructor(
     private http: HttpClient,
@@ -21,8 +20,8 @@ export class AuthenticationService {
     this.userPayload = this.decodedToken();
   }
 
-  logIn(loginFormData: any): Observable<User> {
-    return this.http.post<User>('https://localhost:7172/api/user/login', loginFormData);
+  logIn(loginFormData: any) {
+    return this.http.post<any>('https://localhost:7172/api/user/login', loginFormData);
   }
 
   logOut(){
@@ -68,9 +67,5 @@ export class AuthenticationService {
   getDevTeam(){
     if(this.userPayload)
     return this.userPayload.nameid;
-  }
-
-  getUserId(){
-    return this.userId;
   }
 }

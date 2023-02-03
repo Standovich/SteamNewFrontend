@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -39,8 +38,8 @@ export class LoginComponent implements OnInit {
     .subscribe({
       next: (response) => {
         this.loginForm.reset();
-        console.log(response.token)
-        this.authService.storeToken(response.token)
+        console.log(response.token);
+        this.authService.storeToken(response.token);
         this.authService.updateLocalStorage();
         this.initialNavigation();
       },

@@ -37,8 +37,8 @@ export class UsersService {
     this.devTeam$.next(devteam);
   }
 
-  addUser(addUserFormData: any): Observable<User> {
-    return this.http.post<User>('https://localhost:7172/api/user/addUser', addUserFormData);
+  addUser(addUserFormData: any) {
+    return this.http.post<any>('https://localhost:7172/api/user/addUser', addUserFormData);
   }
 
   getAllUsers(): Observable<User[]> {
@@ -57,7 +57,7 @@ export class UsersService {
     return this.http.delete<User>('https://localhost:7172/api/user/deleteUser/' + id);
   }
 
-  updateUser(editUserFormData: any): Observable<User>{
-    return this.http.put<User>('https://localhost:7172/api/user/updateUser', editUserFormData);
+  updateUser(editUserFormData: any){
+    return this.http.put<any>('https://localhost:7172/api/user/updateUser', editUserFormData);
   }
 }

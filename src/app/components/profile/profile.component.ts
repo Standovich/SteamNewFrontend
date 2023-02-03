@@ -16,7 +16,6 @@ export class ProfileComponent implements OnInit{
   public id!: number;
   public developers: Developer[] = [];
   public userForm !: FormGroup;
-  public passwdForm !: FormGroup;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -34,14 +33,10 @@ export class ProfileComponent implements OnInit{
     this.userForm = this.formBuilder.group({
       id: 0,
       username: [''],
-      password: [''],
-      confirm: [''],
+      oldPassword: [''],
+      newPassword: [''],
       role: [''],
       devTeam: -1
-    })
-
-    this.passwdForm = this.formBuilder.group({
-      passwd: ['']
     })
   }
 
@@ -73,15 +68,22 @@ export class ProfileComponent implements OnInit{
     this.userForm.reset();
     this.userForm.controls['id'].setValue(this.user.id);
     this.userForm.controls['username'].setValue(this.user.user_Name);
-    this.userForm.controls['password'].setValue("");
-    this.userForm.controls['confirm'].setValue("");
+    this.userForm.controls['oldPassword'].setValue("");
+    this.userForm.controls['newPassword'].setValue("");
     this.userForm.controls['role'].setValue(this.user.role);
     this.userForm.controls['devTeam'].setValue(this.user.devTeam_Id);
     this.roleChange();
   }
 
-  resetConfirmForm(){
-    this.passwdForm.reset();
+  setFormNewUser(formData: FormData){
+    this.userForm.reset();
+    this.userForm.controls['id'].setValue(formData.get("Id"));
+    this.userForm.controls['username'].setValue(formData.get("User_Name"));
+    this.userForm.controls['oldPassword'].setValue("");
+    this.userForm.controls['newPassword'].setValue("");
+    this.userForm.controls['role'].setValue(formData.get("Role"));
+    this.userForm.controls['devTeam'].setValue(formData.get("DevTeam_Id"));
+    this.roleChange();
   }
 
   roleChange(){
@@ -90,41 +92,27 @@ export class ProfileComponent implements OnInit{
     else this.userForm.controls['devTeam'].enable();
   }
 
-  confirmChanges(){
+  submitChanges(){
     var formData: any = new FormData();
-    formData.append('Username', this.authService.getUsername());
-    formData.append('Password', this.passwdForm.get('passwd')?.value);
-
-    this.authService.logIn(formData)
-    .subscribe({
-      next: (response) => {
-        this.userForm.get('password')?.
-        setValue(this.passwdForm.get('passwd')?.value);
-        this.pushChanges();
-        alert("Password successfuly changed!");
-        let ref = document.getElementById('userCancel');
-        ref?.click();
-      },
-      error: (err) => {
-        console.log(err);
-      }
-    })
-  }
-
-  pushChanges(){
-    var formData: any = new FormData();
-    formData.append('Id', this.userForm.get('id')?.value)
-    formData.append('User_Name', this.userForm.get('username')?.value)
-    formData.append('User_Password', this.userForm.get('password')?.value)
-    formData.append('Role', this.userForm.get('role')?.value)
+    formData.append('Id', this.userForm.get('id')?.value);
+    formData.append('User_Name', this.userForm.get('username')?.value);
+    formData.append('User_OldPassword', this.userForm.get('oldPassword')?.value);
+    formData.append('User_NewPassword', this.userForm.get('newPassword')?.value);
+    formData.append('Role', this.userForm.get('role')?.value);
     formData.append('DevTeam_Id', this.userForm.get('devTeam')?.value);
 
     this.userService.updateUser(formData)
     .subscribe({
-      next: (user) => {
-        console.log(user);
-        let ref = document.getElementById('userCancel');
-        ref?.click();
+      next: (response) => {
+        alert(response.message);
+        console.log(response.token);
+        this.authService.storeToken(response.token);
+        this.authService.updateLocalStorage();
+        this.setFormNewUser(formData);
+      },
+      error: (err) => {
+        console.log(err);
+        this.setForm();
       }
     })
   }

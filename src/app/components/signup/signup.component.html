@@ -9,12 +9,28 @@
         <form [formGroup]="signupForm" (ngSubmit)="submitForm()">
           <div class="mb-3">
             <label for="inputUsername" class="form-label">Username</label>
-            <input formControlName="username" type="text" class="form-control" id="inputUsername">
+            <input formControlName="username" type="text" class="form-control" id="inputUsername" placeholder="Username">
           </div>
           <div class="mb-3">
             <label for="inputPassword" class="form-label">Password</label>
-            <input formControlName="passwd" type="password" class="form-control" id="inputPassword">
+            <input formControlName="passwd" type="password" class="form-control" id="inputPassword" placeholder="Password">
           </div>
+          <div class="mb-3">
+            <label for="inputRole" class="form-label">Role:</label>
+            <select (change)="roleChange()" formControlName="role" class="form-control" id="inputRole">
+                <option value="" disabled selected>Select user's role</option>
+                <option value="Admin">Admin</option>
+                <option value="Developer">Developer</option>
+                <option value="Customer">Customer</option>
+            </select>
+        </div>
+          <div class="mb-3">
+            <label for="inputDeveloper" class="form-label">Developer</label>
+            <select formControlName="devTeam" class="form-control" id="inputDeveloper">
+                <option *ngFor="let developer of developers" 
+                value="{{developer.id}}">{{developer.devTeam_name}}</option>
+            </select>
+        </div>
           <button type="submit" class="btn btn-primary">Sign Up</button>
           <a routerLink="/login">Cancel</a>
         </form>

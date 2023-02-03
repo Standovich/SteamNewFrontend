@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { Developer } from 'src/app/models/developer.model';
@@ -48,6 +47,7 @@ export class DashboardComponent implements OnInit{
     this.initForms();
     this.refreshGameData();
     this.refreshUserData();
+    if(this.role !== 'Developer')
     this.refreshDevData();
   }
 
@@ -72,7 +72,7 @@ export class DashboardComponent implements OnInit{
       releaseDate: Date(),
       description: [''],
       price: 0,
-      devTeam: 0
+      devTeam: this.devTeam
     })
     this.postForm = this.formBuilder.group({
       id: 0,

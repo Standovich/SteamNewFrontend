@@ -26,8 +26,8 @@ export class GamesService {
     return this.http.get<Game>('https://localhost:7172/api/game/getGame/' + id);
   }
 
-  getOwnedGames(id: number): Observable<Game[]>{
-    return this.http.get<Game[]>('https://localhost:7172/api/game/getOwned/' + id);
+  getOwnedGames(username: string): Observable<Game[]>{
+    return this.http.get<Game[]>('https://localhost:7172/api/game/getOwned/' + username);
   }
 
   deleteGame(id: number){

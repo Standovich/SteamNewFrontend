@@ -4,16 +4,16 @@
       <div class="card">
         <div class="text-center">
           <h1>Login</h1>
-          <h6>Please enter email & password</h6>
+          <h6>Please enter username & password</h6>
         </div>
         <form [formGroup]="loginForm" (ngSubmit)="login()">
           <div class="mb-3">
             <label for="inputUsername" class="form-label">Username</label>
-            <input formControlName="username" type="text" class="form-control" id="inputUsername">
+            <input formControlName="username" type="text" class="form-control" id="inputUsername" placeholder="Username">
           </div>
           <div class="mb-3">
             <label for="inputPassword" class="form-label">Password</label>
-            <input formControlName="password" type="password" class="form-control" id="inputPassword">
+            <input formControlName="password" type="password" class="form-control" id="inputPassword" placeholder="Password">
           </div>
           <button type="submit" class="btn btn-primary">Login</button>
         </form>
