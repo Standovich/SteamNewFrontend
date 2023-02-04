@@ -21,6 +21,7 @@ export class DashboardComponent implements OnInit{
   public users: User[] = [];
   public developers: Developer[] = [];
   public posts: Post[] = [];
+  public devTeam!: Developer;
 
   public gameForm !: FormGroup;
   public userForm !: FormGroup;
@@ -28,7 +29,7 @@ export class DashboardComponent implements OnInit{
   public postForm !: FormGroup;
 
   public role!: string;
-  private devTeam!: number;
+  private devTeamId!: number;
   private selectedGame!: number;
 
   showAdd !: boolean;
@@ -46,9 +47,10 @@ export class DashboardComponent implements OnInit{
     this.initDevValues();
     this.initForms();
     this.refreshGameData();
-    this.refreshUserData();
-    if(this.role !== 'Developer')
-    this.refreshDevData();
+    if(this.role !== 'Developer'){
+      this.refreshUserData();
+      this.refreshDevData();
+    }
   }
 
   initDevValues(){
@@ -61,7 +63,17 @@ export class DashboardComponent implements OnInit{
     this.userService.getDevTeamFromLocalStorage()
     .subscribe(value => {
       let devFromToken = this.authService.getDevTeam();
-      this.devTeam = value || devFromToken;
+      this.devTeamId = value || devFromToken;
+    })
+
+    this.developerService.getDeveloper(this.devTeamId)
+    .subscribe({
+      next: (dev) => {
+        this.devTeam = dev;
+      },
+      error: (err) => {
+        console.log(err);
+      }
     })
   }
 
@@ -95,12 +107,12 @@ export class DashboardComponent implements OnInit{
 
   refreshGameData(){
     if(this.role === 'Developer'){
-      this.gameService.getGamesByDev(this.devTeam)
+      this.gameService.getGamesByDev(this.devTeamId)
       .subscribe({
         next: (games) => {
           console.log(games);
           this.games = games;
-          this.selectedGame = games[0].devTeam_Id;
+          this.selectedGame = games[0].id;
           this.refreshPostData(this.selectedGame);
         },
         error: (err) => {
@@ -114,7 +126,7 @@ export class DashboardComponent implements OnInit{
         next: (games) => {
           console.log(games);
           this.games = games;
-          this.selectedGame = games[0].devTeam_Id;
+          this.selectedGame = games[0].id;
           this.refreshPostData(this.selectedGame);
         },
         error: (err) => {
@@ -173,8 +185,8 @@ export class DashboardComponent implements OnInit{
 
     this.gameService.addGame(formData)
     .subscribe({
-      next: (game) => {
-        console.log(game);
+      next: (response) => {
+        alert(response.message);
         this.gameForm.reset();
         let ref = document.getElementById('gameCancel');
         ref?.click();
@@ -198,8 +210,8 @@ export class DashboardComponent implements OnInit{
 
     this.postService.addPost(formData)
     .subscribe({
-      next: (post) => {
-        console.log(post);
+      next: (response) => {
+        alert(response.message);
         this.postForm.reset();
         let ref = document.getElementById('postCancel');
         ref?.click();
@@ -220,8 +232,8 @@ export class DashboardComponent implements OnInit{
 
     this.userService.addUser(formData)
     .subscribe({
-      next: (user) => {
-        console.log(user);
+      next: (response) => {
+        alert(response.message)
         this.userForm.reset();
         let ref = document.getElementById('userCancel');
         ref?.click();
@@ -240,8 +252,8 @@ export class DashboardComponent implements OnInit{
 
     this.developerService.addDeveloper(formData)
     .subscribe({
-      next: (developer) => {
-        console.log(developer);
+      next: (response) => {
+        alert(response.message);
         this.developerForm.reset();
         let ref = document.getElementById('devCancel');
         ref?.click();
@@ -256,8 +268,8 @@ export class DashboardComponent implements OnInit{
   deleteGame(id: number){
     this.gameService.deleteGame(id)
     .subscribe({
-      next: (game) => {
-        console.log(game);
+      next: (response) => {
+        alert(response.message);
         this.refreshGameData();
       },
       error: (err) => {
@@ -269,8 +281,8 @@ export class DashboardComponent implements OnInit{
   deletePost(id: number){
     this.postService.deletePost(id)
     .subscribe({
-      next: (post) => {
-        console.log(post);
+      next: (response) => {
+        alert(response.message);
         this.refreshPostData(this.selectedGame);
       },
       error: (err) => {
@@ -282,8 +294,8 @@ export class DashboardComponent implements OnInit{
   deleteUser(id: number){
     this.userService.deleteUser(id)
     .subscribe({
-      next: (user) => {
-        console.log(user);
+      next: (response) => {
+        alert(response.message);
         this.refreshUserData();
       },
       error: (err) => {
@@ -295,8 +307,8 @@ export class DashboardComponent implements OnInit{
   deleteDeveloper(id: number){
     this.developerService.deleteDeveloper(id)
     .subscribe({
-      next: (developer) => {
-        console.log(developer);
+      next: (response) => {
+        alert(response.message);
         this.refreshDevData();
       },
       error: (err) => {
@@ -316,8 +328,8 @@ export class DashboardComponent implements OnInit{
 
     this.gameService.updateGame(formData)
     .subscribe({
-      next: (game) => {
-        console.log(game);
+      next: (response) => {
+        alert(response.message);
         let ref = document.getElementById('gameCancel');
         ref?.click();
         this.refreshGameData();
@@ -334,8 +346,8 @@ export class DashboardComponent implements OnInit{
 
     this.postService.updatePost(formData)
     .subscribe({
-      next: (post) => {
-        console.log(post);
+      next: (response) => {
+        alert(response.message)
         let ref = document.getElementById('postCancel');
         ref?.click();
         this.refreshPostData(this.selectedGame);
@@ -353,8 +365,8 @@ export class DashboardComponent implements OnInit{
 
     this.userService.updateUser(formData)
     .subscribe({
-      next: (user) => {
-        console.log(user);
+      next: (response) => {
+        alert(response.message);
         let ref = document.getElementById('userCancel');
         ref?.click();
         this.refreshUserData();
@@ -369,8 +381,8 @@ export class DashboardComponent implements OnInit{
 
     this.developerService.updateDeveloper(formData)
     .subscribe({
-      next: (developer) => {
-        console.log(developer);
+      next: (response) => {
+        alert(response.message)
         let ref = document.getElementById('devCancel');
         ref?.click();
         this.refreshDevData();
@@ -380,6 +392,9 @@ export class DashboardComponent implements OnInit{
 
   onAddGame(){
     this.gameForm.reset();
+    if(this.role === "Developer"){
+      this.gameForm.controls['devTeam'].setValue(this.devTeam.id);
+    }
     this.showAdd = true;
     this.showEdit = false;
   }
@@ -427,7 +442,6 @@ export class DashboardComponent implements OnInit{
     this.showEdit = true;
     this.userForm.controls['id'].setValue(user.id);
     this.userForm.controls['username'].setValue(user.user_Name);
-    this.userForm.controls['password'].setValue(user.user_Password);
     this.userForm.controls['role'].setValue(user.role);
     this.userForm.controls['devTeam'].setValue(user.devTeam_Id);
     this.roleChange();

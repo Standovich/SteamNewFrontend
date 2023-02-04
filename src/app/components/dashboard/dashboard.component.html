@@ -121,9 +121,17 @@
                     <div class="mb-3">
                         <label for="gameDeveloper" class="form-label">Developer</label>
                         <select formControlName="devTeam" class="form-control" id="gameDeveloper">
-                            <option value="" disabled selected>Select developer</option>
-                            <option *ngFor="let developer of developers" 
-                            value="{{developer.id}}">{{developer.devTeam_name}}</option>
+                            <ng-container
+                            *ngIf="role === 'Developer'; then Developer; else Admin">
+                            </ng-container>
+                            <ng-template #Developer>
+                                <option value="{{devTeam.id}}">{{devTeam.devTeam_name}}</option>
+                            </ng-template>
+                            <ng-template #Admin>
+                                <option value="" disabled selected>Select developer</option>
+                                <option *ngFor="let developer of developers" 
+                                value="{{developer.id}}">{{developer.devTeam_name}}</option>
+                            </ng-template>
                         </select>
                     </div>
                     <div class="mb-3">

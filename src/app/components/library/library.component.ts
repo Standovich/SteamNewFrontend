@@ -6,6 +6,7 @@ import { AuthenticationService } from 'src/app/services/authentication.service';
 import { DevelopersService } from 'src/app/services/developers.service';
 import { GamesService } from 'src/app/services/games.service';
 import { PostsService } from 'src/app/services/posts.service';
+import { UsersService } from 'src/app/services/users.service';
 
 @Component({
   selector: 'app-library',
@@ -18,22 +19,31 @@ export class LibraryComponent implements OnInit{
   public posts: Post[] = [];
   public display: boolean = false;
   public gameDisplay!: Game;
+  private username!: string;
 
   constructor(
     private gameService: GamesService,
     private authService: AuthenticationService,
+    private userService: UsersService,
     private developerService: DevelopersService,
     private postService: PostsService
   ){}
   ngOnInit(): void {
+    this.loadUsername();
     this.loadGames();
     this.loadDevs();
   }
 
+  loadUsername(){
+    this.userService.getUsernameFromLocalStorage()
+    .subscribe(value => {
+      let usernameFromToken = this.authService.getUsername();
+      this.username = value || usernameFromToken;
+    });
+  }
+
   loadGames(){
-    const username = this.authService.getUsername();
-    console.log(username);
-    this.gameService.getOwnedGames(username)
+    this.gameService.getOwnedGames(this.username)
     .subscribe({
       next: (games) => {
         this.games = games;

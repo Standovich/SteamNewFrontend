@@ -13,7 +13,6 @@ import { UsersService } from 'src/app/services/users.service';
 })
 export class ProfileComponent implements OnInit{
   public user!: User;
-  public id!: number;
   public developers: Developer[] = [];
   public userForm !: FormGroup;
 
@@ -25,8 +24,8 @@ export class ProfileComponent implements OnInit{
   ){}
 
   ngOnInit(): void {
-    this.initForms();
     this.getData();
+    this.initForms();
   }
 
   initForms(){
@@ -41,7 +40,14 @@ export class ProfileComponent implements OnInit{
   }
 
   getData(){
-    this.userService.getUserByName(this.authService.getUsername())
+    let username = "";
+    this.userService.getUsernameFromLocalStorage()
+    .subscribe(value => {
+      let roleFromToken = this.authService.getUsername();
+      username = value || roleFromToken;
+    })
+
+    this.userService.getUserByName(username)
     .subscribe({
       next: (user) => {
         this.user = user;
@@ -75,17 +81,6 @@ export class ProfileComponent implements OnInit{
     this.roleChange();
   }
 
-  setFormNewUser(formData: FormData){
-    this.userForm.reset();
-    this.userForm.controls['id'].setValue(formData.get("Id"));
-    this.userForm.controls['username'].setValue(formData.get("User_Name"));
-    this.userForm.controls['oldPassword'].setValue("");
-    this.userForm.controls['newPassword'].setValue("");
-    this.userForm.controls['role'].setValue(formData.get("Role"));
-    this.userForm.controls['devTeam'].setValue(formData.get("DevTeam_Id"));
-    this.roleChange();
-  }
-
   roleChange(){
     if(this.userForm.get('role')?.value !== 'Developer')
     this.userForm.controls['devTeam'].disable();
@@ -97,18 +92,21 @@ export class ProfileComponent implements OnInit{
     formData.append('Id', this.userForm.get('id')?.value);
     formData.append('User_Name', this.userForm.get('username')?.value);
     formData.append('User_OldPassword', this.userForm.get('oldPassword')?.value);
-    formData.append('User_NewPassword', this.userForm.get('newPassword')?.value);
+    let newPassword = this.userForm.get('newPassword')?.value;
+    console.log(newPassword);
+    formData.append('User_NewPassword', newPassword);
     formData.append('Role', this.userForm.get('role')?.value);
     formData.append('DevTeam_Id', this.userForm.get('devTeam')?.value);
 
-    this.userService.updateUser(formData)
+    this.userService.updateUserAuth(formData)
     .subscribe({
       next: (response) => {
         alert(response.message);
         console.log(response.token);
         this.authService.storeToken(response.token);
         this.authService.updateLocalStorage();
-        this.setFormNewUser(formData);
+        this.userForm.reset();
+        this.getData();
       },
       error: (err) => {
         console.log(err);

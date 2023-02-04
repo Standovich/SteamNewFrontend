@@ -10,8 +10,8 @@ export class PostsService {
 
   constructor(private http: HttpClient) { }
 
-  addPost(addPostFormData: any): Observable<Post>{
-    return this.http.post<Post>('https://localhost:7172/api/post/addPost', addPostFormData);
+  addPost(addPostFormData: any){
+    return this.http.post<any>('https://localhost:7172/api/post/addPost', addPostFormData);
   }
 
   getAllPosts(): Observable<Post[]>{
@@ -27,10 +27,10 @@ export class PostsService {
   }
 
   deletePost(id: number){
-    return this.http.delete<Post>('https://localhost:7172/api/post/deletePost/' + id);
+    return this.http.delete<any>('https://localhost:7172/api/post/deletePost/' + id);
   }
 
-  updatePost(editPostFormData: any): Observable<Post>{
-    return this.http.put<Post>('https://localhost:7172/api/post/updatePost', editPostFormData);
+  updatePost(editPostFormData: any){
+    return this.http.put<any>('https://localhost:7172/api/post/updatePost', editPostFormData);
   }
 }

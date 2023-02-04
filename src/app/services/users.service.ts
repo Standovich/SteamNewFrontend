@@ -54,10 +54,14 @@ export class UsersService {
   }
 
   deleteUser(id: number){
-    return this.http.delete<User>('https://localhost:7172/api/user/deleteUser/' + id);
+    return this.http.delete<any>('https://localhost:7172/api/user/deleteUser/' + id);
   }
 
   updateUser(editUserFormData: any){
     return this.http.put<any>('https://localhost:7172/api/user/updateUser', editUserFormData);
+  }
+
+  updateUserAuth(editUserFormData: any){
+    return this.http.put<any>('https://localhost:7172/api/user/updateUserAuth', editUserFormData);
   }
 }
