@@ -10,28 +10,33 @@
           <div class="mb-3">
             <label for="inputUsername" class="form-label">Username</label>
             <input formControlName="username" type="text" class="form-control" id="inputUsername" placeholder="Username">
+            <small *ngIf="signupForm.controls['username'].dirty && signupForm.hasError('required', 'username')" class="text-danger">*Username is required</small>
           </div>
           <div class="mb-3">
             <label for="inputPassword" class="form-label">Password</label>
             <input formControlName="passwd" type="password" class="form-control" id="inputPassword" placeholder="Password">
+            <small *ngIf="signupForm.controls['passwd'].dirty && signupForm.hasError('required', 'passwd')" class="text-danger">*Password is required</small>
           </div>
           <div class="mb-3">
             <label for="inputRole" class="form-label">Role:</label>
             <select (change)="roleChange()" formControlName="role" class="form-control" id="inputRole">
-                <option value="" disabled selected>Select user's role</option>
+                <option value="" disabled selected>Select your role</option>
                 <option value="Admin">Admin</option>
                 <option value="Developer">Developer</option>
                 <option value="Customer">Customer</option>
             </select>
-        </div>
+            <small *ngIf="signupForm.controls['role'].dirty && signupForm.hasError('required', 'role')" class="text-danger">*Selecting a role is required</small>
+          </div>
           <div class="mb-3">
             <label for="inputDeveloper" class="form-label">Developer</label>
             <select formControlName="devTeam" class="form-control" id="inputDeveloper">
+                <option value="" disabled selected>Select developer team</option>
                 <option *ngFor="let developer of developers" 
                 value="{{developer.id}}">{{developer.devTeam_name}}</option>
             </select>
-        </div>
-          <button type="submit" class="btn btn-primary">Sign Up</button>
+            <small *ngIf="signupForm.controls['devTeam'].dirty && signupForm.hasError('required', 'devTeam')" class="text-danger">*Selecting a developer team is required</small>
+          </div>
+          <button [disabled]="signupForm.invalid" type="submit" class="btn btn-primary">Sign Up</button>
           <a routerLink="/login">Cancel</a>
         </form>
       </div>

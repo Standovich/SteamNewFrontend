@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Developer } from 'src/app/models/developer.model';
 import { DevelopersService } from 'src/app/services/developers.service';
@@ -23,13 +23,14 @@ export class SignupComponent implements OnInit{
   ngOnInit(): void {
     this.initForm();
     this.loadDevData();
+    this.roleChange();
   }
 
   initForm(){
     this.signupForm = this.formBuilder.group({
-      username: [''],
-      passwd: [''],
-      role: [''],
+      username: ['', Validators.required],
+      passwd: ['', Validators.required],
+      role: ['', Validators.required],
       devTeam: -1
     })
   }

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Developer } from 'src/app/models/developer.model';
 import { User } from 'src/app/models/user.model';
 import { AuthenticationService } from 'src/app/services/authentication.service';
@@ -32,7 +32,7 @@ export class ProfileComponent implements OnInit{
     this.userForm = this.formBuilder.group({
       id: 0,
       username: [''],
-      oldPassword: [''],
+      oldPassword: ['', Validators.required],
       newPassword: [''],
       role: [''],
       devTeam: -1

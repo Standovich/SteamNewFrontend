@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Developer } from 'src/app/models/developer.model';
 import { User } from 'src/app/models/user.model';
 import { Game } from 'src/app/models/game.model';
@@ -50,6 +50,7 @@ export class DashboardComponent implements OnInit{
     if(this.role !== 'Developer'){
       this.refreshUserData();
       this.refreshDevData();
+      this.roleChange();
     }
   }
 
@@ -80,28 +81,28 @@ export class DashboardComponent implements OnInit{
   initForms(){
     this.gameForm = this.formBuilder.group({
       id: 0,
-      name: [''],
+      name: ['', Validators.required],
       releaseDate: Date(),
-      description: [''],
+      description: ['', Validators.required],
       price: 0,
       devTeam: this.devTeam
     })
     this.postForm = this.formBuilder.group({
       id: 0,
-      title: [''],
-      content: [''],
+      title: ['', Validators.required],
+      content: ['', Validators.required],
       gameId: -1
     })
     this.userForm = this.formBuilder.group({
       id: 0,
-      username: [''],
-      password: [''],
+      username: ['', Validators.required],
+      password: ['', Validators.required],
       role: [''],
       devTeam: -1
     })
     this.developerForm = this.formBuilder.group({
       id: 0,
-      name: ['']
+      name: ['', Validators.required]
     })
   }
 
