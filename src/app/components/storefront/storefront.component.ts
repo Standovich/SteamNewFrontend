@@ -40,6 +40,7 @@ export class StorefrontComponent implements OnInit {
     .subscribe({
       next: (games) => {
         this.games = games;
+        console.log(games);
       },
       error: (err) => {
         console.log(err);
