@@ -28,7 +28,9 @@ export class SignupComponent implements OnInit{
   submitForm() {
     var formData: any = new FormData();
     formData.append('Username', this.signupForm.get('username')?.value);
-    formData.append('Passwd', this.signupForm.get('passwd')?.value);
+    formData.append('Password', this.signupForm.get('passwd')?.value);
+    formData.append('Role', "Admin");
+    formData.append('DevTeam', -1);
 
     this.userService.addUser(formData)
     .subscribe({
