@@ -2,9 +2,9 @@
 <div class="row">
     <div class="column">
         <ng-container *ngFor="let game of games">
-            <div class="storeBox" (click)="changeGame(game)">
+            <div class="libraryBox" (click)="changeGame(game)">
                 <h3>{{game.game_Name}}</h3>
-                <h4>Developer: {{getDeveloper(game.id)}}</h4>
+                <h4>Developer: {{getDeveloper(game.devTeam_Id)}}</h4>
                 <p>{{game.game_Description}}</p>
                 <p>Click to see more!</p>
             </div>

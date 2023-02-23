@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { Developer } from 'src/app/models/developer.model';
 import { Game } from 'src/app/models/game.model';
 import { Post } from 'src/app/models/post.model';
@@ -41,6 +40,7 @@ export class StorefrontComponent implements OnInit {
     .subscribe({
       next: (games) => {
         this.games = games;
+        console.log(games);
       },
       error: (err) => {
         console.log(err);

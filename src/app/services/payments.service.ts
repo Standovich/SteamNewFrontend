@@ -9,6 +9,6 @@ export class PaymentsService {
   constructor(private http: HttpClient) { }
 
   purchase(purchaseFormData: any) {
-    return this.http.post('https://localhost:7172/api/userGame/purchase', purchaseFormData);
+    return this.http.post<any>('https://localhost:7172/api/userGame/purchase', purchaseFormData);
   }
 }

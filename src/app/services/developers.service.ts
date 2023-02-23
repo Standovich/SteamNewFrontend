@@ -10,8 +10,8 @@ export class DevelopersService {
 
   constructor(private http: HttpClient) { }
 
-  addDeveloper(addDevFormData: any): Observable<Developer> {
-    return this.http.post<Developer>('https://localhost:7172/api/developer/addDeveloper', addDevFormData);
+  addDeveloper(addDevFormData: any) {
+    return this.http.post<any>('https://localhost:7172/api/developer/addDeveloper', addDevFormData);
   }
 
   getAllDevelopers(): Observable<Developer[]> {
@@ -23,10 +23,10 @@ export class DevelopersService {
   }
 
   deleteDeveloper(id: number){
-    return this.http.delete<Developer>('https://localhost:7172/api/developer/deleteDeveloper/' + id);
+    return this.http.delete<any>('https://localhost:7172/api/developer/deleteDeveloper/' + id);
   }
 
-  updateDeveloper(editDevFormData: any): Observable<Developer>{
-    return this.http.put<Developer>('https://localhost:7172/api/developer/updateDeveloper', editDevFormData);
+  updateDeveloper(editDevFormData: any){
+    return this.http.put<any>('https://localhost:7172/api/developer/updateDeveloper', editDevFormData);
   }
 }

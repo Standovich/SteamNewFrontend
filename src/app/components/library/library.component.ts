@@ -19,52 +19,37 @@ export class LibraryComponent implements OnInit{
   public posts: Post[] = [];
   public display: boolean = false;
   public gameDisplay!: Game;
-  private userId!: number;
+  private username!: string;
 
   constructor(
     private gameService: GamesService,
-    private userService: UsersService,
     private authService: AuthenticationService,
+    private userService: UsersService,
     private developerService: DevelopersService,
     private postService: PostsService
   ){}
   ngOnInit(): void {
-    this.loadUserId().then(res => {
-      this.loadGames()
-    });
+    this.loadUsername();
+    this.loadGames();
     this.loadDevs();
   }
 
-  loadUserId(){
-    return new Promise((resolve, reject) => {
-      let name!: string;
-      this.userService.getUsernameFromLocalStorage()
-      .subscribe(value => {
-        let roleFromToken = this.authService.getUsername();
-        name = value || roleFromToken;
-      });
-
-      this.userService.getUserByName(name)
-      .subscribe({
-      next: (user) => {
-        this.userId = user.id;
-      },
-      error: (err) => {
-        console.log(err);
-      }
-      });
-      resolve(this.userId);
-    })
+  loadUsername(){
+    this.userService.getUsernameFromLocalStorage()
+    .subscribe(value => {
+      let usernameFromToken = this.authService.getUsername();
+      this.username = value || usernameFromToken;
+    });
   }
 
   loadGames(){
-    this.gameService.getOwnedGames(this.userId)
+    this.gameService.getOwnedGames(this.username)
     .subscribe({
       next: (games) => {
         this.games = games;
       },
       error: (err) => {
-        console.log(err);
+        console.log(err._body);
       }
     })
   }

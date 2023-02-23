@@ -10,8 +10,8 @@ export class GamesService {
 
   constructor(private http: HttpClient) { }
 
-  addGame(addGameFormData: any): Observable<Game> {
-    return this.http.post<Game>('https://localhost:7172/api/game/addGame', addGameFormData);
+  addGame(addGameFormData: any){
+    return this.http.post<any>('https://localhost:7172/api/game/addGame', addGameFormData);
   }
 
   getAllGames(): Observable<Game[]> {
@@ -26,15 +26,15 @@ export class GamesService {
     return this.http.get<Game>('https://localhost:7172/api/game/getGame/' + id);
   }
 
-  getOwnedGames(id: number): Observable<Game[]>{
-    return this.http.get<Game[]>('https://localhost:7172/api/game/getOwned/' + id);
+  getOwnedGames(username: string): Observable<Game[]>{
+    return this.http.get<Game[]>('https://localhost:7172/api/game/getOwned/' + username);
   }
 
   deleteGame(id: number){
-    return this.http.delete<Game>('https://localhost:7172/api/game/deleteGame/' + id);
+    return this.http.delete<any>('https://localhost:7172/api/game/deleteGame/' + id);
   }
 
-  updateGame(editGameFormData: any): Observable<Game>{
-    return this.http.put<Game>('https://localhost:7172/api/game/updateGame', editGameFormData);
+  updateGame(editGameFormData: any){
+    return this.http.put<any>('https://localhost:7172/api/game/updateGame', editGameFormData);
   }
 }

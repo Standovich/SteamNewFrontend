@@ -117,14 +117,24 @@
                     <div class="mb-3">
                         <label for="gameName" class="form-label">Name</label>
                         <input type="text" formControlName="name" class="form-control" id="gameName">
+                        <small *ngIf="gameForm.controls['name'].dirty && gameForm.hasError('required', 'name')" class="text-danger">*Name is required</small>
                     </div>
                     <div class="mb-3">
                         <label for="gameDeveloper" class="form-label">Developer</label>
                         <select formControlName="devTeam" class="form-control" id="gameDeveloper">
-                            <option value="" disabled selected>Select developer</option>
-                            <option *ngFor="let developer of developers" 
-                            value="{{developer.id}}">{{developer.devTeam_name}}</option>
+                            <ng-container
+                            *ngIf="role === 'Developer'; then Developer; else Admin">
+                            </ng-container>
+                            <ng-template #Developer>
+                                <option value="{{devTeam.id}}">{{devTeam.devTeam_name}}</option>
+                            </ng-template>
+                            <ng-template #Admin>
+                                <option value="" disabled selected>Select developer</option>
+                                <option *ngFor="let developer of developers" 
+                                value="{{developer.id}}">{{developer.devTeam_name}}</option>
+                            </ng-template>
                         </select>
+                        <small *ngIf="gameForm.controls['devTeam'].dirty && gameForm.hasError('required', 'devTeam')" class="text-danger">*Select a developer</small>
                     </div>
                     <div class="mb-3">
                         <label for="gameReleaseDate" class="form-label">Release date</label>
@@ -137,12 +147,13 @@
                     <div class="mb-3">
                         <label for="gameDescription" class="form-label">Description</label>
                         <input type="text" formControlName="description" class="form-control" id="gameDescription">
+                        <small *ngIf="gameForm.controls['description'].dirty && gameForm.hasError('required', 'description')" class="text-danger">*Description is required</small>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" id="gameCancel" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" *ngIf="showAdd" (click)="addGame()" class="btn btn-primary">Add</button>
+                <button [disabled]="gameForm.invalid" type="button" *ngIf="showAdd" (click)="addGame()" class="btn btn-primary">Add</button>
                 <button type="button" *ngIf="showEdit" (click)="updateGame()" class="btn btn-primary">Edit</button>
             </div>
         </div>
@@ -164,16 +175,18 @@
                     <div class="mb-3">
                         <label for="postTitle" class="form-label">Title</label>
                         <input type="text" formControlName="title" class="form-control" id="postTitle">
+                        <small *ngIf="postForm.controls['title'].dirty && postForm.hasError('required', 'title')" class="text-danger">*Title is required</small>
                     </div>
                     <div class="mb-3">
                         <label for="postContent" class="form-label">Content</label>
                         <input type="text" formControlName="content" class="form-control" id="postContent">
+                        <small *ngIf="postForm.controls['content'].dirty && postForm.hasError('required', 'content')" class="text-danger">*Title is required</small>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" id="postCancel" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" *ngIf="showAdd" (click)="addPost()" class="btn btn-primary">Add</button>
+                <button [disabled]="postForm.invalid" type="button" *ngIf="showAdd" (click)="addPost()" class="btn btn-primary">Add</button>
                 <button type="button" *ngIf="showEdit" (click)="updatePost()" class="btn btn-primary">Edit</button>
             </div>
         </div>
@@ -195,10 +208,12 @@
                     <div class="mb-3">
                         <label for="userName" class="form-label">Name</label>
                         <input type="text" formControlName="username" class="form-control" id="userName">
+                        <small *ngIf="userForm.controls['username'].dirty && userForm.hasError('required', 'username')" class="text-danger">*Username is required</small>
                     </div>
                     <div class="mb-3">
                         <label for="userPassword" class="form-label">Password</label>
                         <input type="password" formControlName="password" class="form-control" id="userPassword">
+                        <small *ngIf="userForm.controls['password'].dirty && userForm.hasError('required', 'password')" class="text-danger">*Password is required</small>
                     </div>
                     <div class="mb-3">
                         <label for="userRole" class="form-label">Role:</label>
@@ -222,7 +237,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" id="userCancel" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" *ngIf="showAdd" (click)="addUser()" class="btn btn-primary">Add</button>
+                <button [disabled]="userForm.invalid" type="button" *ngIf="showAdd" (click)="addUser()" class="btn btn-primary">Add</button>
                 <button type="button" *ngIf="showEdit" (click)="updateUser()" class="btn btn-primary">Edit</button>
             </div>
         </div>
@@ -244,12 +259,13 @@
                     <div class="mb-3">
                         <label for="developerName" class="form-label">Name</label>
                         <input type="text" formControlName="name" class="form-control" id="developerName">
+                        <small *ngIf="developerForm.controls['name'].dirty && developerForm.hasError('required', 'name')" class="text-danger">*Name is required</small>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" id="devCancel" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" *ngIf="showAdd" (click)="addDeveloper()" class="btn btn-primary">Add</button>
+                <button [disabled]="developerForm.invalid" type="button" *ngIf="showAdd" (click)="addDeveloper()" class="btn btn-primary">Add</button>
                 <button type="button" *ngIf="showEdit" (click)="updateDeveloper()" class="btn btn-primary">Edit</button>
             </div>
         </div>
